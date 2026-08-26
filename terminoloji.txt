@@ -4,6 +4,7 @@ Drive-cycle-like
 Early-life prediction
 Fast-charging analysis
 Margin-based regularization
+Meta-heuristic variants
 Realistic-duty-cycle
 Small-data regression
 Stress-aware
