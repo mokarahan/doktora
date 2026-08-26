@@ -3,6 +3,7 @@ Cross-dataset bench-marking
 Drive-cycle-like
 Early-life prediction
 Fast-charging analysis
+Margin-based regularization
 Realistic-duty-cycle
 Small-data regression
 Stress-aware
