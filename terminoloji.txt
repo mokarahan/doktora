@@ -1,0 +1,10 @@
+Small-data regression
+Uncertainty-aware modeling
+Early-life prediction
+Fast-charging analysis
+Drive-cycle-like
+Stress-aware
+Cross-condition modeling
+Realistic-duty-cycle
+Transfer learning
+Cross-dataset bench-marking
