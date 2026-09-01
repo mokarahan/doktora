@@ -33,7 +33,7 @@ try:
 
     # Display the first line_number rows of the DataFrame
     print(f"--- First {line_number} Rows of Data ---")
-    print(df.head(line_number))
+    print(df.loc[df['type'] == 'discharge'].head(line_number))
 
 except FileNotFoundError:
     print(f"Error: The file at {file_path} was not found.")
