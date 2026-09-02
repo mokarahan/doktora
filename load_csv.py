@@ -3,6 +3,7 @@
 
 import pandas as pd
 import argparse
+import utils as u
 
 # 1. Initialize the argument parser
 parser = argparse.ArgumentParser(description="A script that accepts a filename as an argument and processes the CSV file.")
@@ -28,25 +29,30 @@ try:
     df = pd.read_csv(file_path)
 
     # Display basic information about the columns and data types
-    print("\n--- DataFrame Information ---")
+    u.printb("DataFrame Information")
     print(df.info())
 
-    # Display the first line_number rows of the DataFrame
-    #print(f"--- First {line_number} Rows of Data ---")
-    #print(df.loc[df['type'] == 'discharge'].head(line_number))
-    
     # Open only discharged rows
     df_discharged = df.loc[df['type'] == 'discharge']
+
     for f_index, f_row in df_discharged.iterrows():
-        print(f"Checking discharged record file: {f_row['filename']}")
+        u.printb(f'Checking discharged record file: {f_row['filename']}')
         df_disc_recs = pd.read_csv(f'./tmp/{f_row['filename']}')
+        battery_id = f_row['battery_id']
+        test_id =  f_row['test_id']
+        capacity =  f_row['Capacity']
+        count_row = df_disc_recs.shape[0] 
+        figure_title = f'Battery ID: {battery_id} Data File: {f_row['filename']} Capacity: {f_row['Capacity']} Size: {count_row}'
+        u.plot_test_data(df_disc_recs, figure_title, profile="summarize")
+        
         
         for d_in, d_row in df_disc_recs.iterrows():
-            print(f'Record at: {d_in} ',
-                  f'Voltage_Measured: {d_row['Voltage_measured']}, ',
-                  f'Current_measured: {d_row['Current_measured']}, ',
-                  f'Temperature_measured: {d_row['Temperature_measured']}',
-                  f'at: {d_row['Time']}',
+            print(
+                f'Record at: {d_in} ',
+                f'Voltage_Measured: {d_row['Voltage_measured']}, ',
+                f'Current_measured: {d_row['Current_measured']}, ',
+                f'Temperature_measured: {d_row['Temperature_measured']}',
+                f'at: {d_row['Time']}',
             )
 
 except FileNotFoundError:
