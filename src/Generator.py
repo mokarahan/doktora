@@ -3,6 +3,8 @@ import pandas as pd
 import os
 import scipy.io
 
+np.set_printoptions(suppress=True, precision=4)
+
 home_path = os.environ.get("HOME")
 project_path = f"{home_path}/Dev/Doktora/Dataset/Nasa/"
 print ("Project Home: ", project_path)
@@ -27,7 +29,6 @@ def filter_matfiles_list(filelist):
 
 
 def loadmat(filepath):
-    #np.set_printoptions(suppress=True, precision=4)
     return scipy.io.loadmat(filepath, simplify_cells=True)
 
 # %% [code] {"execution":{"iopub.status.busy":"2022-10-29T20:22:16.548807Z","iopub.execute_input":"2022-10-29T20:22:16.54959Z","iopub.status.idle":"2022-10-29T20:22:16.566778Z","shell.execute_reply.started":"2022-10-29T20:22:16.549535Z","shell.execute_reply":"2022-10-29T20:22:16.56519Z"}}

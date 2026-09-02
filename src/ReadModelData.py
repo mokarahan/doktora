@@ -9,12 +9,16 @@ import pandas as pd
 import os
 import scipy.io
 
+home_path = os.environ.get("HOME")
+project_path = f"{home_path}/Dev/Doktora/Dataset/Nasa/"
+print ("Project Home: ", project_path)
+
 # %% [code] {"execution":{"iopub.status.busy":"2022-10-29T20:22:04.66978Z","iopub.execute_input":"2022-10-29T20:22:04.670241Z","iopub.status.idle":"2022-10-29T20:22:04.678514Z","shell.execute_reply.started":"2022-10-29T20:22:04.670199Z","shell.execute_reply":"2022-10-29T20:22:04.677212Z"}}
 # Helper functions
 def load_filelist():
     
     FILELIST = []
-    for dirname, _, filenames in os.walk('/Users/mokarahan/Dev/Doktora/DataSets/Nasa'):
+    for dirname, _, filenames in os.walk(project_path):
         for filename in filenames:
 
             #filepath = filename
@@ -29,6 +33,7 @@ def filter_matfiles_list(filelist):
 
 
 def loadmat(filepath):
+    #np.set_printoptions(suppress=True, precision=4)
     return scipy.io.loadmat(filepath, simplify_cells=True)
 
 # %% [code] {"execution":{"iopub.status.busy":"2022-10-29T20:22:16.548807Z","iopub.execute_input":"2022-10-29T20:22:16.54959Z","iopub.status.idle":"2022-10-29T20:22:16.566778Z","shell.execute_reply.started":"2022-10-29T20:22:16.549535Z","shell.execute_reply":"2022-10-29T20:22:16.56519Z"}}
@@ -109,10 +114,14 @@ FILELIST = filter_matfiles_list(load_filelist())
 # - 
 
 # %% [code] {"execution":{"iopub.status.busy":"2022-10-29T20:22:20.178164Z","iopub.execute_input":"2022-10-29T20:22:20.178557Z","iopub.status.idle":"2022-10-29T20:22:20.951511Z","shell.execute_reply.started":"2022-10-29T20:22:20.178524Z","shell.execute_reply":"2022-10-29T20:22:20.95041Z"}}
-mat = loadmat("/Users/mokarahan/Dev/Doktora/DataSets/Nasa/5. Battery Data Set/1. BatteryAgingARC-FY08Q4/B0005.mat")
+#mat = loadmat("$HOME/Dev/Doktora/DataSets/Nasa/5. Battery Data Set/1. BatteryAgingARC-FY08Q4/B0005.mat")
+battery_class="B0006"
+file_path = f"{project_path}/5. Battery Data Set/1. BatteryAgingARC-FY08Q4/{battery_class}.mat"
+print ("Converted Data File: ", file_path)
+mat = loadmat(file_path)
 
 # %% [code] {"execution":{"iopub.status.busy":"2022-10-29T20:22:20.953136Z","iopub.execute_input":"2022-10-29T20:22:20.95349Z","iopub.status.idle":"2022-10-29T20:22:20.964747Z","shell.execute_reply.started":"2022-10-29T20:22:20.953459Z","shell.execute_reply":"2022-10-29T20:22:20.962998Z"}}
-df = pd.DataFrame(data=mat['B0005']['cycle'][0]['data'])
+df = pd.DataFrame(data=mat[battery_class]['cycle'][0]['data'])
 
 # %% [code] {"execution":{"iopub.status.busy":"2022-10-29T20:22:22.648629Z","iopub.execute_input":"2022-10-29T20:22:22.649079Z","iopub.status.idle":"2022-10-29T20:22:22.680637Z","shell.execute_reply.started":"2022-10-29T20:22:22.64904Z","shell.execute_reply":"2022-10-29T20:22:22.679216Z"}}
 df.info()
@@ -165,7 +174,7 @@ def plot_test_data(df, profile="charge"):
 plot_test_data(df)
 
 # %% [code] {"execution":{"iopub.status.busy":"2022-10-29T20:22:24.315619Z","iopub.execute_input":"2022-10-29T20:22:24.315977Z","iopub.status.idle":"2022-10-29T20:22:24.341033Z","shell.execute_reply.started":"2022-10-29T20:22:24.315931Z","shell.execute_reply":"2022-10-29T20:22:24.339796Z"}}
-df = pd.DataFrame(data=mat['B0005']['cycle'][1]['data'])
+df = pd.DataFrame(data=mat[battery_class]['cycle'][1]['data'])
 df.head()
 
 # %% [code] {"execution":{"iopub.status.busy":"2022-10-29T20:22:24.682116Z","iopub.execute_input":"2022-10-29T20:22:24.682555Z","iopub.status.idle":"2022-10-29T20:22:25.373825Z","shell.execute_reply.started":"2022-10-29T20:22:24.682517Z","shell.execute_reply":"2022-10-29T20:22:25.372641Z"}}
@@ -268,6 +277,7 @@ for battery_name, mat_filepath in zip(battery_list, FILELIST):
         
         capacity, re, rct = extract_more_metadata(metadata_dict)
         metadata = fill_metadata_row(metadata, test_type, test_start_time, test_temperature, battery_name, test_id, uid, filename, capacity, re, rct)
+        print("CHECK TIME: ", test_start_time)
         
     # if counter > 2:
     #    break
@@ -285,7 +295,6 @@ import shutil
 shutil.make_archive('data', 'zip', 'tmp')
 
 # %% [code]
-
 
 # %% [markdown]
 # ## Problems
