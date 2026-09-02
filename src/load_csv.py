@@ -9,9 +9,11 @@ import utils as u
 parser = argparse.ArgumentParser(description="A script that accepts a filename as an argument and processes the CSV file.")
 
 # 2. Add an argument (positional or optional)
-parser.add_argument("--filename", type=str, help="The name of the filename to process")
+parser.add_argument("--filename", type=str, help="Metadata csv to process")
+parser.add_argument("--data_dir", type=str, help="Dir of csv data files")
 parser.add_argument('--show_figures', action=argparse.BooleanOptionalAction, help="Show figures")
 parser.add_argument('--generate_logs', action=argparse.BooleanOptionalAction, help="Generate logs for the battery data")
+
 
 
 # 3. Parse the command-line arguments
@@ -23,6 +25,7 @@ args = parser.parse_args()
 file_path = args.filename
 figure_enabled = args.show_figures
 gen_logs = args.generate_logs
+data_dir = args.data_dir
 
 # 4. Access and use the argument value
 print(f"Processing file: {file_path}")
@@ -40,7 +43,7 @@ try:
 
     for f_index, f_row in df_discharged.iterrows():
         u.printb(f'Checking discharged record file: {f_row['filename']}')
-        df_disc_recs = pd.read_csv(f'./tmp/{f_row['filename']}')
+        df_disc_recs = pd.read_csv(f'{data_dir}/{f_row['filename']}')
         battery_id = f_row['battery_id']
         test_id =  f_row['test_id']
         capacity =  f_row['Capacity']
