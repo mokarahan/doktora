@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -14,3 +16,54 @@ def printw(str):
 
 def printb(str):
     print(f'{bcolors.OKBLUE}{str}{bcolors.ENDC}')
+
+def plot_test_data(df, figurename='', profile="charge"):
+    
+    if profile=='summarize':
+        plt.figure(figsize=(20,8), num=figurename)
+        plt.plot(df.Time, df.Voltage_measured, 'b', label='Voltage_measured')
+        plt.plot(df.Time, df.Current_measured, 'r', label='Current_measured')
+        plt.plot(df.Time, df.Temperature_measured, 'k', label='Temperature_measured')
+        plt.legend()
+        plt.show()
+
+    elif profile=='charge':
+        plt.figure(figsize=(10,4), num=figurename)
+        plt.plot(df.Time, df.Voltage_measured, 'b', label='Voltage_measured')
+        plt.plot(df.Time, df.Current_measured, 'r', label='Current_measured')
+        plt.legend()
+        plt.show()
+
+        plt.figure(figsize=(10,4), num=figurename)
+        plt.plot(df.Time, df.Voltage_charge, 'b', label='Voltage_charge')
+        plt.plot(df.Time, df.Current_charge, 'r', label='Current_charge')
+        plt.legend()
+        plt.show()
+
+        plt.figure(figsize=(10,4), num=figurename)
+        plt.plot(df.Time, df.Temperature_measured, 'k', label='Temperature_measured')
+        plt.legend()
+        plt.show()
+
+    elif profile=='discharge':
+        plt.figure(figsize=(10,4), num=figurename)
+        plt.plot(df.Time, df.Voltage_measured, 'b', label='Voltage_measured')
+        plt.plot(df.Time, df.Current_measured, 'r', label='Current_measured')
+        plt.legend()
+        plt.show()
+
+        plt.figure(figsize=(10,4), num=figurename)
+        plt.plot(df.Time, df.Voltage_load, 'b', label='Voltage_load')
+        plt.plot(df.Time, df.Current_load, 'r', label='Current_load')
+        plt.legend()
+        plt.show()
+
+        plt.figure(figsize=(10,4), num=figurename)
+        plt.plot(df.Time, df.Temperature_measured, 'k', label='Temperature_measured')
+        plt.legend()
+        plt.show()
+
+    elif profile=='impedance':
+        pass
+    else:
+        print('No cycle recognized')
