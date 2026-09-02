@@ -14,11 +14,8 @@ parser.add_argument("--data_dir", type=str, help="Dir of csv data files")
 parser.add_argument('--show_figures', action=argparse.BooleanOptionalAction, help="Show figures")
 parser.add_argument('--generate_logs', action=argparse.BooleanOptionalAction, help="Generate logs for the battery data")
 
-
-
 # 3. Parse the command-line arguments
 args = parser.parse_args()
-
 
 # Define the path to CSV file
 # (Can be a local file path or a direct web URL)
@@ -35,7 +32,7 @@ try:
     df = pd.read_csv(file_path)
 
     # Display basic information about the columns and data types
-    u.printb("DataFrame Information")
+    u.printb("DataFrame Information")``
     print(df.info())
 
     # Open only discharged rows
@@ -57,7 +54,15 @@ try:
             u.plot_test_data(df_disc_recs, figure_title, profile="summarize")
         else:
             u.printb(f'Battery data is processed for: {figure_title}' )
+
+
+        df_interpolated = df_disc_recs.interpolate(method='linear')
+    
+        if figure_enabled:
+            u.plot_test_data(df_interpolated, figure_title, profile="summarize")
         
+        print(f'INTERPOLATED SIZE COL: {df_interpolated.shape[0]} ROW: {df_interpolated.shape[1]}')
+
         for d_in, d_row in df_disc_recs.iterrows():
             if gen_logs:
                 print(
