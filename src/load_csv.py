@@ -21,7 +21,7 @@ parser.add_argument('--debug', action=argparse.BooleanOptionalAction, help="Gene
 # 3. Parse the command-line arguments
 args = parser.parse_args()
 
-Sample_Size = 100
+Sample_Size = 128
 
 # Define the path to CSV file
 # (Can be a local file path or a direct web URL)
@@ -66,8 +66,19 @@ try:
             if debug :
                 u.printb(f'Battery data is processed for: {figure_title}' )
 
+        # Normalize Time column to 1.0 * SampleSize
+        u.normalize(df=df_disc_recs, colA='Time', newCol='newTime', amplify=Sample_Size)
+
         # Down Sampling to Sample_Size of Rows
-        df_interpolated = df_disc_recs.sample(n=Sample_Size, random_state=42, replace=True, weights="Time")
+        df_interpolated = df_disc_recs.sample(
+            n=Sample_Size,
+            random_state=42,
+            replace=True,
+            weights="newTime",
+            ignore_index=True 
+        )
+        
+        print (df_disc_recs)
     
         if figure_enabled:
             u.plot_test_data(df_interpolated, "Down Sampled - " + figure_title, profile="summarize")

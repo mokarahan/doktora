@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 
+import pandas as pd
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -67,3 +69,12 @@ def plot_test_data(df, figurename='', profile="charge"):
         pass
     else:
         print('No cycle recognized')
+
+def normalize (df: pd.DataFrame, colA: str, newCol:str='', amplify: int=1):
+    # Formula: (x - min) / (max - min)
+    if newCol != '':
+        df[newCol] = (df[colA] - df[colA].min()) / (df[colA].max() - df[colA].min()) * amplify
+    if newCol == '':
+        df[colA] = (df[colA] - df[colA].min()) / (df[colA].max() - df[colA].min())
+
+
