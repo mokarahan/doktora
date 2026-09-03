@@ -5,6 +5,9 @@ import pandas as pd
 import argparse
 import utils as u
 
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+
 # 1. Initialize the argument parser
 parser = argparse.ArgumentParser(description="A script that accepts a filename as an argument and processes the CSV file.")
 
@@ -13,9 +16,12 @@ parser.add_argument("--filename", type=str, help="Metadata csv to process")
 parser.add_argument("--data_dir", type=str, help="Dir of csv data files")
 parser.add_argument('--show_figures', action=argparse.BooleanOptionalAction, help="Show figures")
 parser.add_argument('--generate_logs', action=argparse.BooleanOptionalAction, help="Generate logs for the battery data")
+parser.add_argument('--debug', action=argparse.BooleanOptionalAction, help="Generate Debugging Logs")
 
 # 3. Parse the command-line arguments
 args = parser.parse_args()
+
+Sample_Size = 100
 
 # Define the path to CSV file
 # (Can be a local file path or a direct web URL)
@@ -23,23 +29,27 @@ file_path = args.filename
 figure_enabled = args.show_figures
 gen_logs = args.generate_logs
 data_dir = args.data_dir
+debug = args.debug
 
 # 4. Access and use the argument value
-print(f"Processing file: {file_path}")
+if debug :
+    print(f"Processing file: {file_path}")
 
 try:
     # Load the CSV file into a DataFrame
     df = pd.read_csv(file_path)
 
     # Display basic information about the columns and data types
-    u.printb("DataFrame Information")``
-    print(df.info())
+    if debug :
+        u.printb("DataFrame Information")
+        print(df.info())
 
     # Open only discharged rows
     df_discharged = df.loc[df['type'] == 'discharge']
 
     for f_index, f_row in df_discharged.iterrows():
-        u.printb(f'Checking discharged record file: {f_row['filename']}')
+        if debug :
+            u.printb(f'Checking discharged record file: {f_row['filename']}')
         df_disc_recs = pd.read_csv(f'{data_dir}/{f_row['filename']}')
         battery_id = f_row['battery_id']
         test_id =  f_row['test_id']
@@ -53,15 +63,22 @@ try:
         if figure_enabled:
             u.plot_test_data(df_disc_recs, figure_title, profile="summarize")
         else:
-            u.printb(f'Battery data is processed for: {figure_title}' )
+            if debug :
+                u.printb(f'Battery data is processed for: {figure_title}' )
 
-
-        df_interpolated = df_disc_recs.interpolate(method='linear')
+        # Down Sampling to Sample_Size of Rows
+        df_interpolated = df_disc_recs.sample(n=Sample_Size, random_state=42, replace=True, weights="Time")
     
         if figure_enabled:
-            u.plot_test_data(df_interpolated, figure_title, profile="summarize")
-        
-        print(f'INTERPOLATED SIZE COL: {df_interpolated.shape[0]} ROW: {df_interpolated.shape[1]}')
+            u.plot_test_data(df_interpolated, "Down Sampled - " + figure_title, profile="summarize")
+        #else:
+        #    u.printb(df_interpolated)
+
+        if debug :
+            print(f'INTERPOLATED \
+                Col: {df_disc_recs.shape[0]} Row: {df_disc_recs.shape[1]} -> \
+                Col: {df_interpolated.shape[0]} Row: {df_interpolated.shape[1]}'
+            )
 
         for d_in, d_row in df_disc_recs.iterrows():
             if gen_logs:
