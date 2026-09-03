@@ -77,4 +77,13 @@ def normalize (df: pd.DataFrame, colA: str, newCol:str='', amplify: int=1):
     if newCol == '':
         df[colA] = (df[colA] - df[colA].min()) / (df[colA].max() - df[colA].min())
 
+def max_discharge_time (df: pd.DataFrame, colA: str='Time'):
+    # Formula: max of Time
+    return df[colA].max()
 
+def max_temp (df: pd.DataFrame, colA: str='Temperature_measured'):
+    return df[colA].max()
+
+def max_temp_time (df: pd.DataFrame, colA: str='Temperature_measured'):
+    idx = df.iloc[df[colA].idxmax()]
+    return idx['Time']
