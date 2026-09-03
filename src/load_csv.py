@@ -96,10 +96,13 @@ try:
                 Col: {df_disc_recs.shape[0]} Row: {df_disc_recs.shape[1]} -> \
                 Col: {df_interpolated.shape[0]} Row: {df_interpolated.shape[1]}'
             )
-            print(f'For {filename}  \
+            u.printg(f'For {filename}  \
                 Max Discharge Time is: {u.max_discharge_time(df_disc_recs)}  \
                 Max Temp is: {u.max_temp(df_disc_recs)} \
-                Time is: {u.max_temp_time(df_disc_recs)}')
+                Min Volt is: {u.min_voltage(df_disc_recs)} \
+                Max Temp Time is: {u.max_temp_time(df_disc_recs)} \
+                Mean Volt is: {u.mean_voltage(df_disc_recs)} \
+                ')
 
         if gen_logs:
             for d_in, d_row in df_disc_recs.iterrows():

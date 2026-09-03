@@ -19,6 +19,9 @@ def printw(str):
 def printb(str):
     print(f'{bcolors.OKBLUE}{str}{bcolors.ENDC}')
 
+def printg(str):
+    print(f'{bcolors.OKGREEN}{str}{bcolors.ENDC}')
+
 def plot_test_data(df, figurename='', profile="charge"):
     
     if profile=='summarize':
@@ -87,3 +90,10 @@ def max_temp (df: pd.DataFrame, colA: str='Temperature_measured'):
 def max_temp_time (df: pd.DataFrame, colA: str='Temperature_measured'):
     idx = df.iloc[df[colA].idxmax()]
     return idx['Time']
+
+def min_voltage (df: pd.DataFrame, colA: str='Voltage_measured'):
+    return df[colA].min()
+    
+def mean_voltage (df: pd.DataFrame, colA: str='Voltage_measured'):
+    return df[colA].mean()
+
