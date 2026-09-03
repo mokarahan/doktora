@@ -7,7 +7,7 @@ case "$OS_TYPE" in
         echo "Running on Linux"
         PROJECT_HOME=$HOME/Dev/doktora
         source $HOME/.venv/bin/activate
-        python3 $PROJECT_HOME/src/load_csv.py --filename $PROJECT_HOME/src/metadata.csv --data_dir $PROJECT_HOME/src/tmp --no-show_figures --no-generate_logs $1
+        python3 $PROJECT_HOME/src/load_csv.py --filename $PROJECT_HOME/src/metadata.csv --data_dir $PROJECT_HOME/src/tmp --no-show_figures --no-generate_logs $@
         ;;
     Darwin*)
         echo "Running on macOS"

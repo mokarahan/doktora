@@ -7,6 +7,7 @@ import utils as u
 
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
+pd.set_option('display.width', 200)
 
 # 1. Initialize the argument parser
 parser = argparse.ArgumentParser(description="A script that accepts a filename as an argument and processes the CSV file.")
@@ -70,21 +71,19 @@ try:
             if debug :
                 u.printb(f'Battery data is processed for: {figure_title}' )
 
-        # Normalize Time column to 1.0 * SampleSize
-        u.normalize(df=df_disc_recs, colA='Time', newCol='newTime', amplify=Sample_Size)
-
         # Down Sampling to Sample_Size of Rows
         df_interpolated = df_disc_recs.sample(
             n=Sample_Size,
             random_state=42,
             replace=True,
-            weights="newTime",
+            weights="Time",
             ignore_index=True 
         )
 
-        if debug:
-            print(df_disc_recs.head(10))
+        # Normalize Time column to 1.0 * SampleSize
+        #u.normalize(df=df_interpolated, colA='Time', newCol='newTime', amplify=Sample_Size)
 
+        print(df_interpolated)
 
         if figure_enabled:
             u.plot_test_data(df_interpolated, "Down Sampled - " + figure_title, profile="summarize")
