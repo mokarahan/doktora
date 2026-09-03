@@ -22,17 +22,19 @@ def printb(str):
 def printg(str):
     print(f'{bcolors.OKGREEN}{str}{bcolors.ENDC}')
 
-def plot_test_data(df, figurename='', profile="charge"):
+def plot_xy(X, Y, figurename='', profile="charge"):
     
     if profile=='summarize':
-        plt.figure(figsize=(20,8), num=figurename)
-        plt.plot(df.Time, df.Voltage_measured, 'b', label='Voltage_measured')
-        plt.plot(df.Time, df.Current_measured, 'r', label='Current_measured')
-        plt.plot(df.Time, df.Temperature_measured, 'k', label='Temperature_measured')
+        plt.figure(figsize=(30,12), num=figurename)
+        plt.plot(X, Y[0], marker='o', linestyle='-', color='b', label='Voltage_measured')
+        plt.plot(X, Y[1], marker='x', linestyle='--', color='r', label='Current_measured')
+        plt.plot(X, Y[2], marker='s', linestyle='--', color='k', label='Temperature_measured')
         plt.legend()
         plt.show()
 
-    elif profile=='charge':
+def plot(df, figurename='', profile="charge"):
+
+    if profile=='charge':
         plt.figure(figsize=(10,4), num=figurename)
         plt.plot(df.Time, df.Voltage_measured, 'b', label='Voltage_measured')
         plt.plot(df.Time, df.Current_measured, 'r', label='Current_measured')

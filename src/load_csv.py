@@ -66,27 +66,40 @@ try:
             f'Size: {count_row}'
 
         if figure_enabled:
-            u.plot_test_data(df_disc_recs, figure_title, profile="summarize")
+            u.plot_xy(df_disc_recs.Time,
+                [df_disc_recs.Voltage_measured, df_disc_recs.Current_measured, df_disc_recs.Temperature_measured],
+                figure_title,
+                profile="summarize")
         else:
             if debug :
                 u.printb(f'Battery data is processed for: {figure_title}' )
+
+        if count_row < Sample_Size:
+            u.printe (f'Sample size is bigger than the existing rows in {filename}')
+            continue  # Skips the rest of the loop block for number 3
+
+        #if debug:
+        u.printg(f'Sampling {Sample_Size} of {count_row} rows in {filename}')
 
         # Down Sampling to Sample_Size of Rows
         df_interpolated = df_disc_recs.sample(
             n=Sample_Size,
             random_state=42,
-            replace=True,
-            weights="Time",
+            replace=False,
+            #weights="Time",
             ignore_index=True 
-        )
+        ).sort_values(by='Time', ascending=True)
 
         # Normalize Time column to 1.0 * SampleSize
-        #u.normalize(df=df_interpolated, colA='Time', newCol='newTime', amplify=Sample_Size)
+        u.normalize(df=df_interpolated, colA='Time', newCol='newTime', amplify=Sample_Size)
 
         print(df_interpolated)
 
         if figure_enabled:
-            u.plot_test_data(df_interpolated, "Down Sampled - " + figure_title, profile="summarize")
+            u.plot_xy(df_interpolated.newTime,
+                [df_interpolated.Voltage_measured, df_interpolated.Current_measured, df_interpolated.Temperature_measured],
+                "Down Sampled - " + figure_title,
+                profile="summarize")
 
         if debug :
             u.printb(df_interpolated)
