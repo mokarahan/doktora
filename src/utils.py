@@ -22,7 +22,7 @@ def printb(str):
 def printg(str):
     print(f'{bcolors.OKGREEN}{str}{bcolors.ENDC}')
 
-def plot_xy(X, Y, figurename='', profile="charge"):
+def plot_xy(X, Y, figurename='', profile="summarize"):
     
     if profile=='summarize':
         plt.figure(figsize=(30,12), num=figurename)

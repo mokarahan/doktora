@@ -78,8 +78,8 @@ try:
             u.printe (f'Sample size is bigger than the existing rows in {filename}')
             continue  # Skips the rest of the loop block for number 3
 
-        #if debug:
-        u.printg(f'Sampling {Sample_Size} of {count_row} rows in {filename}')
+        if debug:
+            u.printg(f'Sampling {Sample_Size} of {count_row} rows in {filename}')
 
         # Down Sampling to Sample_Size of Rows
         df_interpolated = df_disc_recs.sample(
@@ -92,8 +92,6 @@ try:
 
         # Normalize Time column to 1.0 * SampleSize
         u.normalize(df=df_interpolated, colA='Time', newCol='newTime', amplify=Sample_Size)
-
-        print(df_interpolated)
 
         if figure_enabled:
             u.plot_xy(df_interpolated.newTime,
