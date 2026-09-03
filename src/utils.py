@@ -16,6 +16,9 @@ class bcolors:
 def printw(str):
     print(f'{bcolors.WARNING}{str}{bcolors.ENDC}')
 
+def printe(str):
+    print(f'{bcolors.FAIL}{str}{bcolors.ENDC}')
+
 def printb(str):
     print(f'{bcolors.OKBLUE}{str}{bcolors.ENDC}')
 
