@@ -48,15 +48,19 @@ try:
     df_discharged = df.loc[df['type'] == 'discharge']
 
     for f_index, f_row in df_discharged.iterrows():
+        filename = f_row['filename']
+
         if debug :
-            u.printb(f'Checking discharged record file: {f_row['filename']}')
-        df_disc_recs = pd.read_csv(f'{data_dir}/{f_row['filename']}')
+            u.printb(f'Checking discharged record file: {filename}')
+
+        df_disc_recs = pd.read_csv(f'{data_dir}/{filename}')
         battery_id = f_row['battery_id']
         test_id =  f_row['test_id']
         capacity =  f_row['Capacity']
         count_row = df_disc_recs.shape[0] 
+        
         figure_title = f'Battery ID: {battery_id} ' \
-            f'Data File: {f_row['filename']} '      \
+            f'Data File: {filename} '      \
             f'Capacity: {f_row['Capacity']} '       \
             f'Size: {count_row}'
 
@@ -77,22 +81,28 @@ try:
             weights="newTime",
             ignore_index=True 
         )
-        
-        print (df_disc_recs)
-    
+
+        if debug:
+            print(df_disc_recs.head(10))
+
+
         if figure_enabled:
             u.plot_test_data(df_interpolated, "Down Sampled - " + figure_title, profile="summarize")
-        #else:
-        #    u.printb(df_interpolated)
 
         if debug :
-            print(f'INTERPOLATED \
+            u.printb(df_interpolated)
+
+            print(f'Interpolated \
                 Col: {df_disc_recs.shape[0]} Row: {df_disc_recs.shape[1]} -> \
                 Col: {df_interpolated.shape[0]} Row: {df_interpolated.shape[1]}'
             )
+            print(f'For {filename}  \
+                Max Discharge Time is: {u.max_discharge_time(df_disc_recs)}  \
+                Max Temp is: {u.max_temp(df_disc_recs)} \
+                Time is: {u.max_temp_time(df_disc_recs)}')
 
-        for d_in, d_row in df_disc_recs.iterrows():
-            if gen_logs:
+        if gen_logs:
+            for d_in, d_row in df_disc_recs.iterrows():
                 print(
                     f'Record at: {d_in} ',
                     f'Voltage_Measured: {d_row['Voltage_measured']}, ',
