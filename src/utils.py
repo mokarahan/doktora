@@ -105,3 +105,5 @@ def min_voltage (df: pd.DataFrame, colA: str='Voltage_measured'):
 def mean_voltage (df: pd.DataFrame, colA: str='Voltage_measured'):
     return df[colA].mean()
 
+def mean_voltage (df: pd.DataFrame, colA: str='Voltage_measured'):
+    return df[colA].mean()
