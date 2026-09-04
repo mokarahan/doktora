@@ -10,15 +10,12 @@ SAMPLE_SIZE = 128
 # Defining main function
 def init():
 
-
     pd.set_option('display.max_rows', None)
     pd.set_option('display.max_columns', None)
     pd.set_option('display.width', 200)
 
 # Parse arguments
 def main():
-
-    init()
 
     # 1. Initialize the argument parser
     parser = argparse.ArgumentParser(description="A script that accepts a filename as an argument and processes the CSV file.")
@@ -151,4 +148,5 @@ def process(file_path: str= './metadata.csv',
 # Using the special variable 
 # __name__
 if __name__=="__main__":
+    init()
     main()
