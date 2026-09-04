@@ -22,7 +22,7 @@ parser.add_argument('--debug', action=argparse.BooleanOptionalAction, help="Gene
 # 3. Parse the command-line arguments
 args = parser.parse_args()
 
-Sample_Size = 128
+SAMPLE_SIZE = 128
 
 # Define the path to CSV file
 # (Can be a local file path or a direct web URL)
@@ -50,6 +50,7 @@ try:
 
     for f_index, f_row in df_discharged.iterrows():
         filename = f_row['filename']
+        Sample_Size = SAMPLE_SIZE
 
         if debug :
             u.printb(f'Checking discharged record file: {filename}')
@@ -75,36 +76,34 @@ try:
                 u.printb(f'Battery data is processed for: {figure_title}' )
 
         if count_row < Sample_Size:
-            u.printe (f'Sample size is bigger than the existing rows in {filename}')
-            continue  # Skips the rest of the loop block for number 3
-
-        if debug:
-            u.printg(f'Sampling {Sample_Size} of {count_row} rows in {filename}')
-
-        # Down Sampling to Sample_Size of Rows
-        df_interpolated = df_disc_recs.sample(
-            n=Sample_Size,
-            random_state=42,
-            replace=False,
-            #weights="Time",
-            ignore_index=True 
-        ).sort_values(by='Time', ascending=True)
-
-        # Normalize Time column to 1.0 * SampleSize
-        u.normalize(df=df_interpolated, colA='Time', newCol='newTime', amplify=Sample_Size)
+            # Up Sampling to Sample_Size of Rows
+            df_polated = df_disc_recs
+            df_polated['newTime'] = df_polated['Time'] 
+            if debug :
+                u.printe (f'Sample size: {Sample_Size} is bigger than the existing rows: {count_row} in {filename}')
+        else:
+            # Down Sampling to Sample_Size of Rows
+            df_polated = df_disc_recs.sample(
+                n=Sample_Size,
+                random_state=42,
+                replace=False,
+                ignore_index=True 
+            ).sort_values(by='Time', ascending=True)
+            # Normalize Time column to 1.0 * SampleSize
+            u.normalize(df=df_polated, colA='Time', newCol='newTime', amplify=Sample_Size)
 
         if figure_enabled:
-            u.plot_xy(df_interpolated.newTime,
-                [df_interpolated.Voltage_measured, df_interpolated.Current_measured, df_interpolated.Temperature_measured],
+            u.plot_xy(df_polated.newTime,
+                [df_polated.Voltage_measured, df_polated.Current_measured, df_polated.Temperature_measured],
                 "Down Sampled - " + figure_title,
                 profile="summarize")
 
         if debug :
-            u.printb(df_interpolated)
+            u.printb(df_polated)
 
             print(f'Interpolated \
                 Col: {df_disc_recs.shape[0]} Row: {df_disc_recs.shape[1]} -> \
-                Col: {df_interpolated.shape[0]} Row: {df_interpolated.shape[1]}'
+                Col: {df_polated.shape[0]} Row: {df_polated.shape[1]}'
             )
             u.printg(f'For {filename}  \
                 Max Discharge Time is: {u.max_discharge_time(df_disc_recs)}  \
