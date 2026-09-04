@@ -1,3 +1,6 @@
+# Created on Mon Sep 01 16:37:00 2026
+# Author: mokarahan
+
 import matplotlib.pyplot as plt
 
 import pandas as pd
